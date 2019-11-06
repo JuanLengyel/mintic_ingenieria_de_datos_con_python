@@ -1,0 +1,14 @@
+news_sites:
+  eltiempo:
+    url: https://www.eltiempo.com/
+    queries:
+      homepage_article_links: 'a.title.page-link'
+  elespectador:
+    url: https://www.elespectador.com/
+    queries:
+      homepage_article_links: 'div.node-term.field.field--name-field-section.field--type-taxonomy-term-reference.field--label-hidden.section_not_need_color h2 a'
+  semana:
+    url: https://www.semana.com/
+    queries:
+      homepage_article_links: 'h2.article-h a'
+  
