@@ -26,8 +26,11 @@ def main(filename):
     df = _fill_missing_titles(df)
     df = _generate_uids_for_rows(df)
     df = _remove_new_lines_from_body(df)
-    df['n_token_title'] = _tokenize_column(df, 'title')
-    df['n_token_body'] = _tokenize_column(df, 'body')
+    df = _tokenize_column(df, 'title')
+    df = _tokenize_column(df, 'body')
+    df = _remove_duplicate_entries(df, 'title')
+    df = _drop_rows_with_missing_values(df)
+    _save_data(df, filename)
 
     return df
 
@@ -39,7 +42,7 @@ def _read_data(filename):
 def _extract_newspaper_uid(filename):
     logger.info('Extracting newspaper uid from file {}'.format(filename))
 
-    return filename.split('_')[0]
+    return filename.split('\\')[1].split('_')[0]
 
 def _add_newspaper_uid_column(df, newspaper_uid):
     logger.info('Filling column uid with newspaper uid {}'.format(newspaper_uid))
@@ -102,8 +105,27 @@ def _tokenize_column(df, column_name):
                             .apply(lambda words_list: list(filter(lambda word: word not in stop_words, words_list)))
                             .apply(lambda words_list: len(words_list))
                         )
+    df['n_token_' + column_name] = tokenized_column
 
-    return tokenized_column
+    return df
+
+def _remove_duplicate_entries(df, column_name):
+    logger.info('Removing duplicate entries')
+
+    return df.drop_duplicates(subset=[column_name], keep='first')
+
+def _drop_rows_with_missing_values(df):
+    logger.info('Removing entries with missing values')
+
+    return df.dropna()
+
+def _save_data(df, filename):
+    clean_filename = 'clean_{}'.format(filename.split('\\')[1])
+
+    logger.info('Saving data at location {}'.format(clean_filename))
+
+    df.to_csv(clean_filename)
+
 
 if __name__ == "__main__":
     
