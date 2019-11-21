@@ -42,7 +42,7 @@ def _read_data(filename):
 def _extract_newspaper_uid(filename):
     logger.info('Extracting newspaper uid from file {}'.format(filename))
 
-    return filename.split('\\')[1].split('_')[0]
+    return filename.split('_')[0]
 
 def _add_newspaper_uid_column(df, newspaper_uid):
     logger.info('Filling column uid with newspaper uid {}'.format(newspaper_uid))
@@ -120,7 +120,7 @@ def _drop_rows_with_missing_values(df):
     return df.dropna()
 
 def _save_data(df, filename):
-    clean_filename = 'clean_{}'.format(filename.split('\\')[1])
+    clean_filename = 'clean_{}'.format(filename)
 
     logger.info('Saving data at location {}'.format(clean_filename))
 
